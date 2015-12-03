@@ -57,4 +57,50 @@ if(@$_GET["collection"] && @$_GET["collection"] != "users"){
   echo json_encode($items);
 }
 
+// Get organization needs
+if($_GET["organizationNeeds"]){
+  if(@$_GET["_id"]){
+    $needs = cockpit('collections:find', 'needs', ['organization'=>$_GET["_id"]]);
+    echo json_encode($needs);
+  }
+  else{
+    echo '
+      {"status":false,"message":"Provide organization _id!"}
+    ';
+  }
+}
+// Get Organization
+if($_GET["organization"]){
+  if(@$_GET["_id"]){
+    $organization = cockpit('collections:findOne', 'organizations', ['_id'=>$_GET["_id"]]);
+    echo json_encode($organization);
+  }
+  else{
+    echo '
+      {"status":false,"message":"Provide organization _id!"}
+    ';
+  }
+}
+
+// Donate
+if($_GET["donate"]){
+  if(@$_GET["need_id"]){
+    $need = cockpit('collections:findOne', 'needs', ['_id'=>$_GET["need_id"]]);
+    $Donation = [
+      "donator" => $_GET["donator_id"],
+      "need" => $_GET["need_id"],
+      "message" => $_GET["message"]
+    ];
+    
+    cockpit('collections:save_entry', 'donations', $Donation);
+    echo '
+      {"status":true,"message":"Thank you for your donation!"}
+    ';
+  }
+  else{
+    echo '
+      {"status":false,"message":"Provide donator_id and need_id!"}
+    ';
+  }
+}
 ?>
