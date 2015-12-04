@@ -1,0 +1,12 @@
+.row{
+  margin:10px 0px;
+}
+.nomargin{margin:0}
+.nopadding{padding:0}
+
+.card{
+  padding:10px;
+  margin:10px;
+  background:rgba(255, 255, 255, 0.47);
+}
+.pointer{cursor:pointer}
