@@ -1,4 +1,4 @@
-var APIPATH = "http://localhost:3001/api/api.php"
+var APIPATH = "http://yardimeli.esy.es/api/api.php"
 var app = angular.module('MyApp',['components','routes'])
 .controller('global',function($scope,$rootScope){
     $scope.WindowHeight = window.innerHeight
