@@ -1,14 +1,16 @@
 <?php
 include('../bootstrap.php');
-
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
 // Register
-if(@$_GET["register"]){
-  $username = $_GET["username"];
+if(@$_POST["Action"]=="Register"){
+  $username = $_POST["username"];
   $users = collection("users")->find(["username"=>$username])->toArray();
   if(sizeof($users)==0){
-    $user = $_GET;
+    $user = $_POST;
     // If api request is valid
-    if($_GET["password"] && $_GET["email"]){
+    if($_POST["password"] && $_POST["email"]){
       cockpit('collections:save_entry', 'users', $user);
       echo '
         {"status":true,"message":"Successfully registered your user"}
@@ -29,9 +31,9 @@ if(@$_GET["register"]){
 }
 
 // Login
-if(@$_GET["login"]){
-  $username = $_GET["username"];
-  $password = $_GET["password"];
+if(@$_POST["Action"]=="Login"){
+  $username = $_POST["username"];
+  $password = $_POST["password"];
   $users = collection("users")->find(["username"=>$username,"password"=>$password])->toArray();
 
   if(sizeof($users)!=0){
@@ -45,22 +47,32 @@ if(@$_GET["login"]){
     ';
   }
 }
+// Get All Needs
+if(@$_POST["Action"]=="GetNeeds"){
+  $items = collection("needs")->find()->toArray();
+  for($i=0;$i<sizeof($items);$i++){
+    $item = $items[$i];
+    $organization = collection("organizations")->find(["_id"=>$item["organization"]])->toArray();
 
+    $items[$i]["organization"] = $organization[0];
+  }
+  echo json_encode($items);
+}
 // Get A Collection
-if(@$_GET["collection"] && @$_GET["collection"] != "users"){
-  if($_GET["limit"] && $_GET["skip"]){
-    $items = collection($_GET["collection"])->find()->limit($_GET["limit"])->skip($_GET["skip"])->toArray();
+if(@$_POST["collection"] && @$_POST["collection"] != "users"){
+  if($_POST["limit"] && $_POST["skip"]){
+    $items = collection($_POST["collection"])->find()->limit($_POST["limit"])->skip($_POST["skip"])->toArray();
   }
   else{
-    $items = collection($_GET["collection"])->find()->toArray();
+    $items = collection($_POST["collection"])->find()->toArray();
   }
   echo json_encode($items);
 }
 
 // Get organization needs
-if($_GET["organizationNeeds"]){
-  if(@$_GET["_id"]){
-    $needs = cockpit('collections:find', 'needs', ['organization'=>$_GET["_id"]]);
+if($_POST["organizationNeeds"]){
+  if(@$_POST["_id"]){
+    $needs = cockpit('collections:find', 'needs', ['organization'=>$_POST["_id"]]);
     echo json_encode($needs);
   }
   else{
@@ -70,9 +82,9 @@ if($_GET["organizationNeeds"]){
   }
 }
 // Get Organization
-if($_GET["organization"]){
-  if(@$_GET["_id"]){
-    $organization = cockpit('collections:findOne', 'organizations', ['_id'=>$_GET["_id"]]);
+if($_POST["organization"]){
+  if(@$_POST["_id"]){
+    $organization = cockpit('collections:findOne', 'organizations', ['_id'=>$_POST["_id"]]);
     echo json_encode($organization);
   }
   else{
@@ -83,15 +95,15 @@ if($_GET["organization"]){
 }
 
 // Donate
-if($_GET["donate"]){
-  if(@$_GET["need_id"]){
-    $need = cockpit('collections:findOne', 'needs', ['_id'=>$_GET["need_id"]]);
+if($_POST["Action"]=="Donate"){
+  if(@$_POST["need_id"]){
+    $need = cockpit('collections:findOne', 'needs', ['_id'=>$_POST["need_id"]]);
     $Donation = [
-      "donator" => $_GET["donator_id"],
-      "need" => $_GET["need_id"],
-      "message" => $_GET["message"]
+      "donator" => $_POST["donator_id"],
+      "need" => $_POST["need_id"],
+      "message" => $_POST["message"]
     ];
-    
+
     cockpit('collections:save_entry', 'donations', $Donation);
     echo '
       {"status":true,"message":"Thank you for your donation!"}
