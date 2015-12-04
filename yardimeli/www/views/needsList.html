@@ -1,0 +1,13 @@
+<div class="card" ng-repeat='Need in Needs'>
+  <h5> {{Need.title}} <small class="pull-right">{{Need.amount}}</small> </h5>
+  <p> {{Need.description}} </p>
+  <hr>
+  <h6 class='pointer' ng-click="Need.organization.hide = !Need.organization.hide ">{{Need.organization.title}}</h6>
+  <p ng-show='Need.organization.hide'> {{Need.organization.description}} </p>
+
+  <div class="text-right">
+    <a class="btn btn-success" href='#/donate/{{Need._id}}'>
+    Donate
+    </a>
+  </div>
+</div>

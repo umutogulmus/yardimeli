@@ -1,0 +1,40 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <title>Document</title>
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/lib/bootstrap.min.css">
+  <link rel="stylesheet" href="css/lib/animate.min.css">
+  <link rel="stylesheet" href="css/lib/materialize.css">
+  <link rel="stylesheet" href="css/components.css">
+  <!-- Scripts -->
+  <script src="js/lib/angular.min.js"></script>
+  <script src="js/lib/angular-route.min.js"></script>
+  <script src="js/lib/jquery.min.js"></script>
+
+  <script src="js/core.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/routes.js"></script>
+  <script src="js/controllers.js"></script>
+
+</head>
+<body ng-app='MyApp' controller='global'>
+<div ng-view id='ngView' style='min-height:{{WindowHeight}}px'></div>
+
+<style>
+  [ng-view]{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    overflow:auto;
+    background-image : url(images/background.jpg);
+    background-size:cover;
+    background-position:center center;
+    background-repeat:no-repeat;
+  }
+</style>
+
+</body>
+</html>
